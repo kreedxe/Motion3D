@@ -176,7 +176,7 @@ int main()
 
 
     /*---------------------------------------------------------------
-     * CREATE VAO, VBO, EBO
+     * CREATE MODEL
      *---------------------------------------------------------------
      */
 
@@ -195,6 +195,21 @@ int main()
     glEnableVertexAttribArray(1);  
 
     glEnable(GL_DEPTH_TEST);  
+
+
+    /*---------------------------------------------------------------
+     * CREATE LIGHTING
+     *---------------------------------------------------------------
+     */
+
+    unsigned int lightVAO;
+    glGenVertexArrays(1, &lightVAO);
+
+    glBindVertexArray(lightVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
 
     /*---------------------------------------------------------------
@@ -294,6 +309,8 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
+        shaderProgram.use();
+        
         unsigned int projectionLoc = glGetUniformLocation(shaderProgram.ID, "projection");
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
@@ -303,7 +320,8 @@ int main()
         unsigned int modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-        shaderProgram.use();
+        unsigned int modelLoc = glGetUniformLocation(shaderProgram.ID, "lightColor");
+        glUniform3f(modelLoc, 1, GL_FALSE, glm::value_ptr(1.0f, 1.0f, 1.0f));
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -429,7 +447,7 @@ void process_input(GLFWwindow* window, float deltaTime)
 
     tabWasDown = glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS;
 
-    const float cameraSpeed = 0.1f * deltaTime;
+    const float cameraSpeed = 0.05f * deltaTime;
         
     if ((glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) && mouseCaptured)
         cameraPos += cameraSpeed * cameraFront;
