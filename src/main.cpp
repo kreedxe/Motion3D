@@ -48,9 +48,9 @@ int main()
      *---------------------------------------------------------------
      */
 
-    const int WIDTH = 1200;
-    const int HEIGHT = 800;
-    const char* TITLE = "OpenGL 4.6 | GLFW 3";
+    const int SCR_WIDTH = 1400;
+    const int SCR_HEIGHT = 800;
+    const char* SCR_TITLE = "OpenGL 4.6 | GLFW 3";
 
     float currentTime = 0.0f;
     float frameTime = 0.0f;
@@ -73,7 +73,7 @@ int main()
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, TITLE, NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, SCR_TITLE, NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -98,10 +98,11 @@ int main()
         glfwSetCursorPosCallback(window, mouse_callback);
     }
 
-    glViewport(0, 0, WIDTH, HEIGHT);
+    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
     glEnable(GL_DEPTH_TEST);
     std::cout << "OpenGL: " << glGetString(GL_VERSION) << "\n";
 
+    camera.setAspectRatio(SCR_WIDTH, SCR_HEIGHT);
     cubeOne.load("../textures/800 Wood Crate.jpg", glm::mat4(1.0f));
 
 

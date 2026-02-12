@@ -11,6 +11,7 @@ class Camera
 private:
     glm::vec3  front       =  glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3  up          =  glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3  pos         =  glm::vec3(0.0f, 0.0f, 3.0f);
 
     float      yaw         = -90.0f;
     float      pitch       =  0.0f;
@@ -18,9 +19,10 @@ private:
     float      lastY       =  600.0 / 2.0;
     float      fov         =  45.0f;
     float      sensivity   =  0.1f;
+    float      width       =  800.0f;
+    float      height      =  600.0f;
     
 public:
-    glm::vec3  pos         =  glm::vec3(0.0f, 0.0f, 3.0f);
     bool firstMouse = true;
     
     Camera();
@@ -29,8 +31,10 @@ public:
     void mouseCallback(double xpos, double ypos);
     void scrollCallback(double xoffset, double yoffset);
     void keyboardCallback(GLFWwindow* window, float deltaTime);
+    void setAspectRatio(float width, float height);
     
     glm::mat4 getView();
     glm::mat4 getProjection();
+    glm::vec3 getPos();
 
 };

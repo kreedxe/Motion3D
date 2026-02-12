@@ -55,18 +55,32 @@ void Camera::scrollCallback(double xoffset, double yoffset)
 
 void Camera::keyboardCallback(GLFWwindow* window, float deltaTime)
 {
-    const float cameraSpeed = 0.05f * deltaTime;
-        
-    if ((glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS))
-        pos += cameraSpeed * front;
-    if ((glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS))
-        pos -= cameraSpeed * front;
-    if ((glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS))
-        pos -= glm::normalize(glm::cross(front, up)) * cameraSpeed;
-    if ((glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS))
-        pos += glm::normalize(glm::cross(front, up)) * cameraSpeed;
+    float cameraSpeed = 0.03f * deltaTime;
+    glm::vec3 direction(0.0f);
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        direction += front;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        direction -= front;
+
+    glm::vec3 right = glm::normalize(glm::cross(front, up));
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        direction -= right;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        direction += right;
+
+    if (glm::length(direction) > 0.0f)
+        direction = glm::normalize(direction);
+
+    pos += direction * cameraSpeed;
 }
 
+void Camera::setAspectRatio(float width, float height)
+{
+    this->width = width;
+    this->height = height;
+}
 
 glm::mat4 Camera::getView()
 {
@@ -79,5 +93,10 @@ glm::mat4 Camera::getView()
 
 glm::mat4 Camera::getProjection()
 {
-    return glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f);
+    return glm::perspective(glm::radians(fov), width / height, 0.1f, 100.0f);
+}
+
+glm::vec3 Camera::getPos()
+{
+    return pos;
 }
