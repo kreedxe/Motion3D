@@ -14,6 +14,8 @@ void Cube::load(const char* texturePath, glm::mat4 transformMatrix)
     int success;
     char infoLog[512];
 
+    transform = transformMatrix;
+
     float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
          0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -95,6 +97,9 @@ void Cube::load(const char* texturePath, glm::mat4 transformMatrix)
     stbi_image_free(data);
 
     shader = new Shaders("../shaders/base.vert.glsl", "../shaders/base.frag.glsl");
+
+    shader->use();
+    shader->setInt("texture", 0);
 }
 
 
@@ -104,14 +109,15 @@ Cube::~Cube()
 
 void Cube::draw(Camera* camera)
 {
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    
     shader->use();
 
     shader->setMat4("projection", camera->getProjection());
     shader->setMat4("view", camera->getView());
     shader->setMat4("model", transform);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
 
     glBindVertexArray(VAO);
 

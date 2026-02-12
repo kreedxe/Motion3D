@@ -165,6 +165,8 @@ int main()
         {
             ImGui::Text("FPS: %f", fps);
             ImGui::Text("Frame Time: %f", frameTime);
+            ImGui::Text("Delta time: %f", deltaTime);
+            ImGui::Separator();
             ImGui::End();
         }
         
@@ -256,5 +258,8 @@ void process_input(GLFWwindow* window, float deltaTime)
 
     tabWasDown = glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS;
 
-    camera.keyboardCallback(window, deltaTime);
+    if (mouseCaptured)
+    {
+        camera.keyboardCallback(window, deltaTime);
+    }
 }
