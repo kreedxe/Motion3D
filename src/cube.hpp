@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include <string>
 #include <glm/glm.hpp>
 
 #include "shaders.hpp"
@@ -14,13 +13,14 @@ private:
     unsigned int VAO, VBO, texture;
     glm::mat4 transform;
 
-    Shaders shader;
+    Shaders* shader;
 
 public:
-    Cube(char* texturePath, glm::mat4 transformMatrix);
+    Cube();
     ~Cube();
 
     void draw(Camera* camera);
+    void load(const char* texturePath, glm::mat4 transformMatrix);
     void destroy();
 
 };

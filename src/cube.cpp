@@ -4,13 +4,15 @@
 #include <glad/glad.h>
 #include <stb_image.h>
 
-Cube::Cube(char* texturePath, glm::mat4 transformMatrix):
-    shader("../shaders/base.vert.glsl", "../shaders/base.frag.glsl")
+Cube::Cube()
+{
+}
+
+
+void Cube::load(const char* texturePath, glm::mat4 transformMatrix)
 {
     int success;
     char infoLog[512];
-
-    transform = transformMatrix;
 
     float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -18,7 +20,7 @@ Cube::Cube(char* texturePath, glm::mat4 transformMatrix):
          0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
          0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 
 
         -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
          0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
@@ -87,10 +89,12 @@ Cube::Cube(char* texturePath, glm::mat4 transformMatrix):
     }
     else
     {
-        printf("Failed to load texture ", texturePath, "\n");
+        printf("Failed to load texture %s\n", texturePath);
     }
 
     stbi_image_free(data);
+
+    shader = new Shaders("../shaders/base.vert.glsl", "../shaders/base.frag.glsl");
 }
 
 
@@ -100,12 +104,11 @@ Cube::~Cube()
 
 void Cube::draw(Camera* camera)
 {
-    shader.use();
+    shader->use();
 
-    shader.setMat4("projection", camera->getProjection());
-    shader.setMat4("view", camera->getView());
-    shader.setMat4("model", transform);
-    shader.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader->setMat4("projection", camera->getProjection());
+    shader->setMat4("view", camera->getView());
+    shader->setMat4("model", transform);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -120,7 +123,9 @@ void Cube::draw(Camera* camera)
 
 void Cube::destroy()
 {
-    shader.destroy();
+    shader->destroy();
+    delete shader;
+
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteTextures(1, &texture);

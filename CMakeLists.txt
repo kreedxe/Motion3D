@@ -4,6 +4,9 @@ project(amogus)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
 
 #------------------------------------------------
 # FIND REQUIRED LIBRARIES
@@ -37,14 +40,21 @@ target_include_directories(imgui PUBLIC external/imgui)
 
 
 #------------------------------------------------
+# BUILD STB IMAGE STATIC LIBRARY
+#------------------------------------------------
+add_library(stb_image STATIC external/stb/stb_image_impl.c)
+target_include_directories(stb_image PUBLIC external/stb)
+
+
+#------------------------------------------------
 # BUILD MAIN EXECUTABLE
 #------------------------------------------------
 set(SOURCES 
     src/main.cpp 
     src/shaders.cpp 
     src/camera.cpp
-    src/cube.cpp)
+    src/cube.cpp
+)
 
 add_executable(amongUs ${SOURCES})
-target_link_libraries(amongUs PRIVATE glfw glad OpenGL::GL imgui glm::glm)
-target_include_directories(amongUs PRIVATE external/stb)
+target_link_libraries(amongUs PRIVATE glfw glad OpenGL::GL imgui glm::glm stb_image)
