@@ -37,7 +37,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 Camera camera;
-Cube cubeOne; 
 
 
 int main()
@@ -103,7 +102,17 @@ int main()
     std::cout << "OpenGL: " << glGetString(GL_VERSION) << "\n";
 
     camera.setAspectRatio(SCR_WIDTH, SCR_HEIGHT);
-    cubeOne.load("../textures/800 Wood Crate.jpg", glm::mat4(1.0f));
+    
+    Cube cubeOne; 
+    Cube cubeTwo;
+
+    glm::mat4 cubeTransform;
+
+    cubeTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+    cubeOne.load("../textures/256_Marble 01.png", cubeTransform);
+
+    cubeTransform = glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, 0.0f, 0.0f));
+    cubeTwo.load("../textures/256_Marble 01.png", cubeTransform);
 
 
     /*---------------------------------------------------------------
@@ -183,6 +192,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         cubeOne.draw(&camera);
+        cubeTwo.draw(&camera);
         
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -200,6 +210,7 @@ int main()
     ImGui::DestroyContext();
     
     cubeOne.destroy();
+    cubeTwo.destroy();
 
     glfwDestroyWindow(window);
     glfwTerminate();
