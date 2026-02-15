@@ -3,18 +3,21 @@
 
 #include <glad/glad.h>
 #include <stb_image.h>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 Cube::Cube()
 {
+    m_position = glm::vec3(0.0f, 0.0f, 0.0f);
+    m_rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
 }
 
 
-void Cube::load(const char* texturePath, glm::mat4 transformMatrix)
+void Cube::load(const char* texturePath)
 {
     int success;
     char infoLog[512];
-
-    transform = transformMatrix;
 
     float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -73,8 +76,8 @@ void Cube::load(const char* texturePath, glm::mat4 transformMatrix)
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glGenTextures(1, &m_texture);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -96,10 +99,10 @@ void Cube::load(const char* texturePath, glm::mat4 transformMatrix)
 
     stbi_image_free(data);
 
-    shader = new Shaders("../shaders/base.vert.glsl", "../shaders/base.frag.glsl");
+    m_program = new ShaderProgram("../shaders/base.vert.glsl", "../shaders/base.frag.glsl");
 
-    shader->use();
-    shader->setInt("texture", 0);
+    m_program->use();
+    m_program->setInt("texture", 0);
 }
 
 
@@ -109,15 +112,22 @@ Cube::~Cube()
 
 void Cube::draw(Camera* camera)
 {
-    
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    
-    shader->use();
+    glm::mat4 transform(1.0f);
 
-    shader->setMat4("projection", camera->getProjection());
-    shader->setMat4("view", camera->getView());
-    shader->setMat4("model", transform);
+    glm::mat4 T = glm::translate(glm::mat4(1.0f), m_position);
+    glm::mat4 R = glm::mat4(glm::quat(glm::radians(m_rotation)));
+    glm::mat4 S = glm::scale(glm::mat4(1.0f), m_scale);
+
+    transform = T * R * S;
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+    
+    m_program->use();
+
+    m_program->setMat4("projection", camera->getProjection());
+    m_program->setMat4("view", camera->getView());
+    m_program->setMat4("model", transform);
 
     glBindVertexArray(VAO);
 
@@ -129,10 +139,46 @@ void Cube::draw(Camera* camera)
 
 void Cube::destroy()
 {
-    shader->destroy();
-    delete shader;
+    m_program->destroy();
+    delete m_program;
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteTextures(1, &texture);
+    glDeleteTextures(1, &m_texture);
+}
+
+
+void Cube::setPosition(glm::vec3 pos)
+{
+    m_position = pos;
+}
+
+
+void Cube::setRotation(glm::vec3 rotation)
+{
+    m_rotation = rotation;
+}
+
+
+void Cube::setScale(glm::vec3 scale)
+{
+    m_scale = scale;
+}
+
+
+void Cube::move(glm::vec3 value)
+{
+    m_position += value;
+}
+
+
+void Cube::rotate(glm::vec3 value)
+{
+    m_rotation += value;
+}
+
+
+void Cube::scale(glm::vec3 value)
+{
+    m_scale *= value;
 }

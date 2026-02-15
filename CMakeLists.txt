@@ -51,9 +51,10 @@ target_include_directories(stb_image PUBLIC external/stb)
 #------------------------------------------------
 set(SOURCES 
     src/main.cpp 
-    src/shaders.cpp 
+    src/shaderProgram.cpp 
     src/camera.cpp
     src/cube.cpp
+    src/light.cpp
 )
 
 add_executable(amongUs ${SOURCES})

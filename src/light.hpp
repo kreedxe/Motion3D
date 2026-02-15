@@ -6,30 +6,31 @@
 #include "shaderProgram.hpp"
 #include "camera.hpp"
 
-class Cube
+class LightCube
 {
 
 private:
     unsigned int VAO, VBO;
-    unsigned int m_texture;
 
     glm::vec3 m_position;
     glm::vec3 m_rotation;
     glm::vec3 m_scale;
+    glm::vec3 m_color;
 
     ShaderProgram* m_program;
 
 public:
-    Cube();
-    ~Cube();
+    LightCube();
+    ~LightCube();
 
     void draw(Camera* camera);
-    void load(const char* texturePath);
+    void load();
     void destroy();
 
     void setPosition(glm::vec3 pos);
     void setRotation(glm::vec3 rotation);
     void setScale(glm::vec3 scale);
+    void setColor(glm::vec3 rgb_color);
 
     void move(glm::vec3 value);
     void rotate(glm::vec3 value);

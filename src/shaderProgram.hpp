@@ -11,11 +11,11 @@
   
 
 /*---------------------------------------------------------------
- * SHADER CLASS HANDLES VERTEX AND FRAGMENT SHADERS
+ * SHADER_PROGRAM CLASS HANDLES VERTEX AND FRAGMENT SHADERS
  *---------------------------------------------------------------
  */
 
-class Shaders
+class ShaderProgram
 {
 
 public:
@@ -24,8 +24,8 @@ public:
     unsigned int ID;
   
     // constructor reads and builds shaders
-    Shaders(const char* vertexPath, const char* fragmentPath);
-    ~Shaders();
+    ShaderProgram(const char* vertexPath, const char* fragmentPath);
+    ~ShaderProgram();
 
     // destroys shader program
     void destroy();

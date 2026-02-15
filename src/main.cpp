@@ -14,15 +14,14 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <cmath>
-#include <stb_image.h>
 
 #include <imgui.h>
 #include <backend/imgui_impl_glfw.h>
 #include <backend/imgui_impl_opengl3.h>
 
-#include "shaders.hpp"
 #include "camera.hpp"
 #include "cube.hpp"
+#include "light.hpp"
 
 
 /*---------------------------------------------------------------
@@ -105,15 +104,14 @@ int main()
     
     Cube cubeOne; 
     Cube cubeTwo;
+    LightCube light;
 
-    glm::mat4 cubeTransform;
+    cubeOne.load("../textures/256_Marble 01.png");
+    cubeTwo.load("../textures/256_Marble 01.png");
+    light.load();
 
-    cubeTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-    cubeOne.load("../textures/256_Marble 01.png", cubeTransform);
-
-    cubeTransform = glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, 0.0f, 0.0f));
-    cubeTwo.load("../textures/256_Marble 01.png", cubeTransform);
-
+    cubeTwo.move({2.0f, 0.0f, 0.0f});
+    light.move({1.0f, 0.0f, -2.0f});
 
     /*---------------------------------------------------------------
      * INITIALIZE IMGUI
@@ -193,6 +191,7 @@ int main()
         
         cubeOne.draw(&camera);
         cubeTwo.draw(&camera);
+        light.draw(&camera);
         
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -211,6 +210,7 @@ int main()
     
     cubeOne.destroy();
     cubeTwo.destroy();
+    light.destroy();
 
     glfwDestroyWindow(window);
     glfwTerminate();
