@@ -105,13 +105,16 @@ int main()
     Cube cubeOne; 
     Cube cubeTwo;
     LightCube light;
-
-    cubeOne.load("../textures/256_Marble 01.png");
-    cubeTwo.load("../textures/256_Marble 01.png");
+    
     light.load();
-
+    cubeOne.load("../textures/256_Marble 01.png", &camera, &light);
+    cubeTwo.load("../textures/256_Marble 01.png", &camera, &light);
+    
     cubeTwo.move({2.0f, 0.0f, 0.0f});
     light.move({1.0f, 0.0f, -2.0f});
+    light.setScale({0.2f, 0.2f, 0.2f});
+
+    glm::vec3 lightPos = light.getPosition();
 
     /*---------------------------------------------------------------
      * INITIALIZE IMGUI
@@ -177,6 +180,13 @@ int main()
             ImGui::Separator();
             ImGui::End();
         }
+
+        if (ImGui::Begin("Light"))
+        {
+            ImGui::DragFloat3("Light pos", glm::value_ptr(lightPos), 0.1f);
+            ImGui::Separator();
+            ImGui::End();
+        }
         
         ImGui::Render();
 
@@ -186,11 +196,13 @@ int main()
          *---------------------------------------------------------------
          */
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+         light.setPosition(lightPos);
+
+        glClearColor(0.05f, 0.07f, 0.07f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        cubeOne.draw(&camera);
-        cubeTwo.draw(&camera);
+        cubeOne.draw();
+        cubeTwo.draw();
         light.draw(&camera);
         
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

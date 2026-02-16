@@ -159,3 +159,15 @@ void LightCube::scale(glm::vec3 value)
 {
     m_scale *= value;
 }
+
+
+glm::vec3 LightCube::getColor()
+{
+    return m_color;
+}
+
+
+glm::vec3 LightCube::getPosition()
+{
+    return m_position;
+}

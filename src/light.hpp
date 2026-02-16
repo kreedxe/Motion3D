@@ -35,4 +35,7 @@ public:
     void move(glm::vec3 value);
     void rotate(glm::vec3 value);
     void scale(glm::vec3 value);
+
+    glm::vec3 getColor();
+    glm::vec3 getPosition();
 };
