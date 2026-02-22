@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(amogus)
+project(Motion)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -71,5 +71,5 @@ set(SOURCES
     src/light.cpp
 )
 
-add_executable(amongUs ${SOURCES})
-target_link_libraries(amongUs PRIVATE glfw glad OpenGL::GL imgui glm::glm stb_image)
+add_executable(Motion3D ${SOURCES})
+target_link_libraries(Motion3D PRIVATE glfw glad OpenGL::GL imgui glm::glm stb_image)
