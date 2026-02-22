@@ -9,11 +9,9 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 
 #------------------------------------------------
-# FIND REQUIRED LIBRARIES
+# FIND OPENGL
 #------------------------------------------------
-find_package(glfw3 CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(glm CONFIG REQUIRED)
 
 
 #------------------------------------------------
@@ -44,6 +42,22 @@ target_include_directories(imgui PUBLIC external/imgui)
 #------------------------------------------------
 add_library(stb_image STATIC external/stb/stb_image_impl.c)
 target_include_directories(stb_image PUBLIC external/stb)
+
+
+#------------------------------------------------
+# ADD GLM LIBRARY
+#------------------------------------------------
+add_subdirectory(external/glm)
+
+
+#------------------------------------------------
+# ADD GLFW LIBRARY
+#------------------------------------------------
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+add_subdirectory(external/glfw)
 
 
 #------------------------------------------------

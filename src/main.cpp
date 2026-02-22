@@ -48,7 +48,7 @@ int main()
 
     const int SCR_WIDTH = 1400;
     const int SCR_HEIGHT = 800;
-    const char* SCR_TITLE = "OpenGL 4.6 | GLFW 3";
+    const char* SCR_TITLE = "OpenGL 4.1 | GLFW 3";
 
     float currentTime = 0.0f;
     float frameTime = 0.0f;
@@ -67,9 +67,11 @@ int main()
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, SCR_TITLE, NULL, NULL);
     if (window == NULL)
@@ -96,7 +98,10 @@ int main()
         glfwSetCursorPosCallback(window, mouse_callback);
     }
 
-    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+    int fbW, fbH;
+    glfwGetFramebufferSize(window, &fbW, &fbH);
+
+    glViewport(0, 0, fbW, fbH);
     glEnable(GL_DEPTH_TEST);
     std::cout << "OpenGL: " << glGetString(GL_VERSION) << "\n";
 
@@ -126,7 +131,7 @@ int main()
     ImGui::StyleColorsDark();
 
     ImGui_ImplGlfw_InitForOpenGL(window, false);
-    ImGui_ImplOpenGL3_Init("#version 460");
+    ImGui_ImplOpenGL3_Init("#version 410");
 
     if (!mouseCaptured)
     {
