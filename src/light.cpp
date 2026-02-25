@@ -1,5 +1,6 @@
 
 #include "light.hpp"
+#include "glm/fwd.hpp"
 
 #include <glad/glad.h>
 #include <stb_image.h>
@@ -8,10 +9,13 @@
 
 LightCube::LightCube()
 {
+    m_ambient = glm::vec3(25.0f, 25.0f, 25.0f);
+    m_diffuse = glm::vec3(127.0f, 127.0f, 127.0f);
+    m_specular = glm::vec3(255.0f, 255.0f, 255.0f);
+
     m_position = glm::vec3(0.0f, 0.0f, 0.0f);
     m_rotation = glm::vec3(0.0f, 0.0f, 0.0f);
     m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
-    m_color = glm::vec3(255.0f, 255.0f, 255.0f);
 }
 
 
@@ -99,7 +103,7 @@ void LightCube::draw(Camera* camera)
     m_program->setMat4("projection", camera->getProjection());
     m_program->setMat4("view", camera->getView());
     m_program->setMat4("model", transform);
-    m_program->setVec3("lightColor", glm::vec3(m_color.x / 255.0f, m_color.y / 255.0f, m_color.z / 255.0f));
+    m_program->setVec3("lightColor", m_specular / 255.0f);
 
     glBindVertexArray(VAO);
 
@@ -137,12 +141,6 @@ void LightCube::setScale(glm::vec3 scale)
 }
 
 
-void LightCube::setColor(glm::vec3 rgb_color)
-{
-    m_color = rgb_color;
-}
-
-
 void LightCube::move(glm::vec3 value)
 {
     m_position += value;
@@ -158,12 +156,6 @@ void LightCube::rotate(glm::vec3 value)
 void LightCube::scale(glm::vec3 value)
 {
     m_scale *= value;
-}
-
-
-glm::vec3 LightCube::getColor()
-{
-    return m_color;
 }
 
 

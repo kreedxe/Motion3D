@@ -49,6 +49,8 @@ int main()
     const int SCR_WIDTH = 1400;
     const int SCR_HEIGHT = 800;
     const char* SCR_TITLE = "OpenGL 4.1 | GLFW 3";
+    float FPS_LIMIT = 60.0f;
+    bool USE_VSYNC = true;
 
     float currentTime = 0.0f;
     float frameTime = 0.0f;
@@ -82,14 +84,14 @@ int main()
     }
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
-
+    glfwSwapInterval(USE_VSYNC ? 1 : 0);
+    
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-
+    
     if (mouseCaptured)
     {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -188,11 +190,14 @@ int main()
 
         if (ImGui::Begin("Light"))
         {
-            ImGui::DragFloat3("Light pos", glm::value_ptr(lightPos), 0.1f);
+            ImGui::DragFloat3("Position", glm::value_ptr(lightPos), 0.1f);
             ImGui::Separator();
+            ImGui::ColorEdit3("Ambient", glm::value_ptr(light.m_ambient));
+            ImGui::DragFloat3("Diffuse", glm::value_ptr(light.m_diffuse), 1.0f, 0.0f, 255.0f);
+            ImGui::DragFloat3("Specular", glm::value_ptr(light.m_specular), 1.0f, 0.0f, 255.0f);
             ImGui::End();
         }
-        
+
         ImGui::Render();
 
 

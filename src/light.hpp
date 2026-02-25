@@ -15,7 +15,6 @@ private:
     glm::vec3 m_position;
     glm::vec3 m_rotation;
     glm::vec3 m_scale;
-    glm::vec3 m_color;
 
     ShaderProgram* m_program;
 
@@ -38,4 +37,8 @@ public:
 
     glm::vec3 getColor();
     glm::vec3 getPosition();
+
+    glm::vec3 m_ambient;
+    glm::vec3 m_diffuse;
+    glm::vec3 m_specular;
 };
