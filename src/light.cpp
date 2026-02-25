@@ -9,9 +9,9 @@
 
 LightCube::LightCube()
 {
-    m_ambient = glm::vec3(25.0f, 25.0f, 25.0f);
-    m_diffuse = glm::vec3(127.0f, 127.0f, 127.0f);
-    m_specular = glm::vec3(255.0f, 255.0f, 255.0f);
+    m_ambient = glm::vec3(0.1f, 0.1f, 0.1f);
+    m_diffuse = glm::vec3(0.5f,0.5f, 0.5f);
+    m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
 
     m_position = glm::vec3(0.0f, 0.0f, 0.0f);
     m_rotation = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -103,7 +103,7 @@ void LightCube::draw(Camera* camera)
     m_program->setMat4("projection", camera->getProjection());
     m_program->setMat4("view", camera->getView());
     m_program->setMat4("model", transform);
-    m_program->setVec3("lightColor", m_specular / 255.0f);
+    m_program->setVec3("lightColor", m_specular);
 
     glBindVertexArray(VAO);
 

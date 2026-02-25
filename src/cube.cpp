@@ -22,6 +22,8 @@ void Cube::load(const char* texturePath, Camera* camera, LightCube* light)
     m_camera = camera;
     m_light = light;
 
+    m_shininess = 32.0f;
+
     float vertices[] = {
         // vertices             // normals             // texture
         -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
@@ -135,15 +137,14 @@ void Cube::draw()
     m_program->setMat4("projection", m_camera->getProjection());
     m_program->setMat4("view", m_camera->getView());
     m_program->setMat4("model", transform);
-    // m_program->setVec3("lightColor", m_light->getColor() / 255.0f);
-    // m_program->setVec3("lightPos", m_light->getPosition());
+
     m_program->setVec3("camera.position", m_camera->getPos());
 
-    m_program->setFloat("material.shininess", 32.0f);
+    m_program->setFloat("material.shininess", m_shininess);
 
-    m_program->setVec3("light.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
-    m_program->setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-    m_program->setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_program->setVec3("light.ambient", m_light->m_ambient);
+    m_program->setVec3("light.diffuse", m_light->m_diffuse);
+    m_program->setVec3("light.specular", m_light->m_specular);
     m_program->setVec3("light.position", m_light->getPosition());
 
     glBindVertexArray(VAO);

@@ -193,8 +193,27 @@ int main()
             ImGui::DragFloat3("Position", glm::value_ptr(lightPos), 0.1f);
             ImGui::Separator();
             ImGui::ColorEdit3("Ambient", glm::value_ptr(light.m_ambient));
-            ImGui::DragFloat3("Diffuse", glm::value_ptr(light.m_diffuse), 1.0f, 0.0f, 255.0f);
-            ImGui::DragFloat3("Specular", glm::value_ptr(light.m_specular), 1.0f, 0.0f, 255.0f);
+            ImGui::ColorEdit3("Diffuse", glm::value_ptr(light.m_diffuse));
+            ImGui::ColorEdit3("Specular", glm::value_ptr(light.m_specular));
+            ImGui::Separator();
+            ImGui::End();
+        }
+
+        if (ImGui::Begin("Cube 1"))
+        {
+            ImGui::DragFloat3("Position", glm::value_ptr(cubeOne.m_position), 0.1f);
+            ImGui::Separator();
+            ImGui::DragFloat("Shininess", &cubeOne.m_shininess, 1.0f, 1.0f, 128.0f);
+            ImGui::Separator();
+            ImGui::End();
+        }
+
+        if (ImGui::Begin("Cube 2"))
+        {
+            ImGui::DragFloat3("Position", glm::value_ptr(cubeTwo.m_position), 0.1f);
+            ImGui::Separator();
+            ImGui::DragFloat("Shininess", &cubeTwo.m_shininess, 1.0f, 1.0f, 128.0f);
+            ImGui::Separator();
             ImGui::End();
         }
 
