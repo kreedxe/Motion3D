@@ -61,6 +61,8 @@ int main()
     int success;
     char infoLog[512];
 
+    glm::vec3 BG_COLOR = glm::vec3(0.05f, 0.07f, 0.07f);
+
     
     /*---------------------------------------------------------------
      * INITIALIZE GLFW, WINDOW AND GLAD
@@ -199,6 +201,13 @@ int main()
             ImGui::End();
         }
 
+        if (ImGui::Begin("Environment"))
+        {
+            ImGui::ColorEdit3("Fill color", glm::value_ptr(BG_COLOR));
+            ImGui::Separator();
+            ImGui::End();
+        }
+
         if (ImGui::Begin("Cube 1"))
         {
             ImGui::DragFloat3("Position", glm::value_ptr(cubeOne.m_position), 0.1f);
@@ -227,7 +236,7 @@ int main()
 
          light.setPosition(lightPos);
 
-        glClearColor(0.05f, 0.07f, 0.07f, 1.0f);
+        glClearColor(BG_COLOR.x, BG_COLOR.y, BG_COLOR.z, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         cubeOne.draw();
