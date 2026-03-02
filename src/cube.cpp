@@ -85,8 +85,16 @@ void Cube::load(const char* texturePath, Camera* camera, LightCube* light)
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    glGenTextures(1, &m_texture);
-    glBindTexture(GL_TEXTURE_2D, m_texture);
+    glGenTextures(1, &m_diffuse);
+    glBindTexture(GL_TEXTURE_2D, m_diffuse);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glGenTextures(1, &m_specular);
+    glBindTexture(GL_TEXTURE_2D, m_specular);
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -94,24 +102,44 @@ void Cube::load(const char* texturePath, Camera* camera, LightCube* light)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     int width, height, nrChannels;
-    unsigned char *data = stbi_load(texturePath, &width, &height, &nrChannels, 0);
+    std::string loadTexture;
+    unsigned char* textureData;
 
-    if (data)
+    loadTexture = std::string(texturePath) + std::string("_diff.png");
+    textureData = stbi_load(loadTexture.c_str(), &width, &height, &nrChannels, 0);
+    if (textureData)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glBindTexture(GL_TEXTURE_2D, m_diffuse);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
     {
-        printf("Failed to load texture %s\n", texturePath);
+        printf("Failed to load texture %s\n", loadTexture.c_str());
     }
 
-    stbi_image_free(data);
+    stbi_image_free(textureData);
+
+    loadTexture = std::string(texturePath) + std::string("_spec.png");
+    textureData = stbi_load(loadTexture.c_str(), &width, &height, &nrChannels, 0);
+    if (textureData)
+    {
+        glBindTexture(GL_TEXTURE_2D, m_specular);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        printf("Failed to load texture %s\n", loadTexture.c_str());
+    }
+    
+    stbi_image_free(textureData);
 
     m_program = new ShaderProgram("../shaders/base.vert.glsl", "../shaders/base.frag.glsl");
 
     m_program->use();
-    m_program->setInt("texture", 0);
+    m_program->setInt("material.diffuse", 0);
+    m_program->setInt("material.specular", 1);
 }
 
 
@@ -130,7 +158,10 @@ void Cube::draw()
     transform = T * R * S;
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_texture);
+    glBindTexture(GL_TEXTURE_2D, m_diffuse);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, m_specular);
     
     m_program->use();
 
@@ -162,7 +193,8 @@ void Cube::destroy()
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteTextures(1, &m_texture);
+    glDeleteTextures(1, &m_diffuse);
+    glDeleteTextures(1, &m_specular);
 }
 
 

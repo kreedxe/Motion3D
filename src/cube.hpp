@@ -12,7 +12,8 @@ class Cube
 
 private:
     unsigned int VAO, VBO;
-    unsigned int m_texture;
+    unsigned int m_diffuse;
+    unsigned int m_specular;
 
     glm::vec3 m_rotation;
     glm::vec3 m_scale;

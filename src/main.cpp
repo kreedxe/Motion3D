@@ -116,8 +116,8 @@ int main()
     LightCube light;
     
     light.load();
-    cubeOne.load("../textures/256_Marble 01.png", &camera, &light);
-    cubeTwo.load("../textures/256_Marble 01.png", &camera, &light);
+    cubeOne.load("../textures/MarbleCube", &camera, &light);
+    cubeTwo.load("../textures/MarbleCube", &camera, &light);
     
     cubeTwo.move({2.0f, 0.0f, 0.0f});
     light.move({1.0f, 0.0f, -2.0f});
