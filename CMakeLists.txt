@@ -22,6 +22,16 @@ target_include_directories(glad PUBLIC external/glad/include)
 
 
 #------------------------------------------------
+# ADD GLFW LIBRARY
+#------------------------------------------------
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+add_subdirectory(external/glfw)
+
+
+#------------------------------------------------
 # BUILD IMGUI STATIC LIBRARY
 #------------------------------------------------
 add_library(imgui STATIC
@@ -35,6 +45,7 @@ add_library(imgui STATIC
     external/imgui/backend/imgui_impl_opengl3.cpp
 )
 target_include_directories(imgui PUBLIC external/imgui)
+target_link_libraries(imgui PUBLIC glfw)
 
 
 #------------------------------------------------
@@ -48,16 +59,6 @@ target_include_directories(stb_image PUBLIC external/stb)
 # ADD GLM LIBRARY
 #------------------------------------------------
 add_subdirectory(external/glm)
-
-
-#------------------------------------------------
-# ADD GLFW LIBRARY
-#------------------------------------------------
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
-add_subdirectory(external/glfw)
 
 
 #------------------------------------------------
